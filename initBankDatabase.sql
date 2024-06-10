@@ -14,6 +14,8 @@ CREATE TABLE PhysicalPersons (
     note TEXT
 );
 
+ALTER TABLE PhysicalPersons MODIFY id INT AUTO_INCREMENT;
+
 CREATE TABLE Loans (
     id INT PRIMARY KEY,
     person_id INT,
@@ -50,8 +52,6 @@ CREATE TABLE Borrowers (
     legal_notes TEXT,
     contracts TEXT
 );
-
-ALTER TABLE PhysicalPersons MODIFY id INT AUTO_INCREMENT;
 
 INSERT INTO PhysicalPersons (id, first_name, last_name, middle_name, passport_number, inn, snils, driving_license, additional_documents, note) 
 VALUES 
