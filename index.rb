@@ -7,7 +7,7 @@ end
 
 # Метод для отображения всех таблиц в базе данных.
 get '/' do
-  client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: '', database: 'BankDatabase', encoding: 'utf8')
+  client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: '', database: 'Observatory', encoding: 'utf8')
   tables = client.query('SHOW TABLES')
   
   html = "<h1>Таблицы:</h1>"
@@ -32,45 +32,44 @@ get '/' do
     html += "</table>"
   end
 
-	html += "<h1>Добавить Физлицо</h1>"
+	html += "<h1>Обновить Объект</h1>"
 	html += <<-HTML 
-    <form action="/add_person" method="post" style="display: flex; flex-direction: column; gap: 10px; width: 200px;"> 
-      <label for="first_name">Имя:</label> 
-      <input type="text" name="first_name"> 
-      <label for="last_name">Фамилия:</label> 
-      <input type="text" name="last_name"> 
-      <label for="middle_name">Отчество:</label> 
-      <input type="text" name="middle_name"> 
-      <label for="passport_number">Паспорт:</label> 
-      <input type="text" name="passport_number"> 
-      <label for="inn">ИНН:</label> 
-      <input type="text" name="inn"> 
-      <label for="snils">СНИЛС:</label> 
-      <input type="text" name="snils"> 
-      <label for="driving_license">Вод. права:</label> 
-      <input type="text" name="driving_license"> 
-      <label for="additional_documents">Доп. документы:</label> 
-      <input type="text" name="additional_documents"> 
-      <label for="note">Примечание:</label> 
-      <input type="text" name="note"> 
-      <input type="submit" value="Добавить Физлицо"> 
+    <form 
+      action="/update_object" 
+      method="post" 
+      style="display: flex; flex-direction: column; gap: 10px; width: 200px;"
+    > 
+      <label for="p_id"><b>ID:</b></label> 
+      <input type="text" name="p_id"> 
+      <label for="p_type">Тип:</label> 
+      <input type="text" name="p_type"> 
+      <label for="p_determination_accuracy">Точность:</label> 
+      <input type="text" name="p_determination_accuracy"> 
+      <label for="p_quantity">Количество:</label> 
+      <input type="text" name="p_quantity"> 
+      <label for="p_time">Время:</label> 
+      <input type="text" name="p_time"> 
+      <label for="p_date">Дата:</label> 
+      <input type="text" name="p_date"> 
+      <label for="p_notes">Примечания:</label> 
+      <input type="text" name="p_notes"> 
+      
+      <input type="submit" value="Обновить Объект">
     </form>
   HTML
 	
   html
 end
 
-post '/add_person' do
-  client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: '', database: 'BankDatabase', encoding: 'utf8')
-  client.query("INSERT INTO PhysicalPersons (first_name, last_name, middle_name, passport_number, inn, snils, driving_license, additional_documents, note) VALUES (
-    '#{params['first_name']}', 
-    '#{params['last_name']}', 
-    '#{params['middle_name']}', 
-    '#{params['passport_number']}', 
-    '#{params['inn']}', 
-    '#{params['snils']}', 
-    '#{params['driving_license']}', 
-    '#{params['additional_documents']}', 
-    '#{params['note']}')"
+post '/update_object' do
+  client = Mysql2::Client.new(host: '127.0.0.1', username: 'root', password: '', database: 'Observatory', encoding: 'utf8')
+  client.query("CALL update_objects(
+    '#{params['p_id']}', 
+    '#{params['p_type']}', 
+    '#{params['p_determination_accuracy']}', 
+    '#{params['p_quantity']}', 
+    '#{params['p_time']}', 
+    '#{params['p_date']}', 
+    '#{params['p_notes']}')"
   )
 end
